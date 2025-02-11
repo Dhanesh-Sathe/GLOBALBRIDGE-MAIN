@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { flattenDiagnosticMessageText } = require('typescript');
 
 const sendOtp = async (email, otp) => {
