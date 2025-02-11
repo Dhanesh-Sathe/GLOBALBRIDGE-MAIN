@@ -20,8 +20,8 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/api/login", loginData);
-      const getUser = await axios.get(`http://localhost:8000/api/verify-otp/${loginData.email}`);
+      const response = await axios.post("https://globalbridge-server.onrender.com/api/login", loginData);
+      const getUser = await axios.get(`https://globalbridge-server.onrender.com/api/verify-otp/${loginData.email}`);
       
       const userData = {
         username: getUser.data.user.username,
