@@ -39,9 +39,9 @@ const OtpVerification = () => {
     }))
   }
 
-   const getUesr = async(optVerifyData.email) => {
-     return await axios.get(`https://globalbridge-server.onrender.com/api/verify-otp/${optVerifyData.email}`);
-   }
+   // const getUesr = async(optVerifyData.email) => {
+   //   return await axios.get(`https://globalbridge-server.onrender.com/api/verify-otp/${optVerifyData.email}`);
+   // }
   // Function to verify OTP
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
