@@ -8,7 +8,7 @@ const Find = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/find');
+        const response = await axios.get('https://globalbridge-server.onrender.com/api/find');
         setCompanies(response.data);
       } catch (error) {
         console.error('Error fetching companies', error);
