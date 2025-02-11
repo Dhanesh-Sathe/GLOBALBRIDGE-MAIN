@@ -39,9 +39,9 @@ const OtpVerification = () => {
     }))
   }
 
-  // const getUesr = async(optVerifyData.email) => {
-  //   return await axios.get(`http://localhost:8000/api/verify-otp/${optVerifyData.email}`);
-  // }
+   const getUesr = async(optVerifyData.email) => {
+     return await axios.get(`https://globalbridge-server.onrender.com/api/verify-otp/${optVerifyData.email}`);
+   }
   // Function to verify OTP
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
@@ -52,8 +52,8 @@ const OtpVerification = () => {
         if(verifyEmail === optVerifyData.email){
 
         
-      const response = await axios.post('http://localhost:8000/api/verify-otp', {email:optVerifyData.email, otp:otpToSend});
-      const getUser = await axios.get(`http://localhost:8000/api/verify-otp/${optVerifyData.email}`);
+      const response = await axios.post('https://globalbridge-server.onrender.com/api/verify-otp', {email:optVerifyData.email, otp:otpToSend});
+      const getUser = await axios.get(`https://globalbridge-server.onrender.com/api/verify-otp/${optVerifyData.email}`);
       const userData = {username: getUser.data.user.username, email: getUser.data.user.email};
       setUser(userData);
       console.log(getUser);
