@@ -1,84 +1,104 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useUser } from '../UserContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import "../css/Home.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { loginUser } = useUser();
+  const { setUser } = useUser();
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
-    setLoginData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setLoginData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/login', loginData);
-      console.log(response);
+      const response = await axios.post("http://localhost:8000/api/login", loginData);
       const getUser = await axios.get(`http://localhost:8000/api/verify-otp/${loginData.email}`);
-      const userData = { username: getUser.data.user.username, email: getUser.data.user.email };
-
-      loginUser(userData); // Call loginUser from UserContext to persist user data
-      toast.success('Login successful!');
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
+      
+      const userData = {
+        username: getUser.data.user.username,
+        email: getUser.data.user.email,
+      };
+      setUser(userData);
+      
+      if (response.data.success) {
+        toast.success("Login successful!");
+        navigate("/home");
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (err) {
-      console.error('Login error', err);
-      toast.error('Login failed, please try again');
+      toast.error("Login failed. Please try again.");
     }
-    setLoginData({ email: '', password: '' });
+    setLoginData({ email: "", password: "" });
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-      <div className="bg-white p-10 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-center text-2xl font-semibold text-gray-700">Login</h2>
-        <form onSubmit={handleLoginSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={loginData.email}
-              onChange={handleLoginChange}
+    <div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen flex items-center justify-center p-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6 }}
+        className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8 shadow-xl w-full max-w-md"
+      >
+        <div className="text-center">
+          <motion.img 
+            src="./images/logo-removebg-preview.png" 
+            alt="Logo" 
+            className="h-16 mx-auto mb-3"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          />
+          <h2 className="text-3xl font-bold text-white">GlobalBridge</h2>
+        </div>
+
+        <form onSubmit={handleLoginSubmit} className="mt-6 space-y-4">
+          <div>
+            <label className="text-white">Email</label>
+            <motion.input 
+              whileFocus={{ scale: 1.05 }}
+              type="email" 
+              name="email" 
+              value={loginData.email} 
+              onChange={handleLoginChange} 
+              className="w-full p-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500" 
               required
-              className="w-full mt-1 p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={loginData.password}
-              onChange={handleLoginChange}
+          <div>
+            <label className="text-white">Password</label>
+            <motion.input 
+              whileFocus={{ scale: 1.05 }}
+              type="password" 
+              name="password" 
+              value={loginData.password} 
+              onChange={handleLoginChange} 
+              className="w-full p-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500" 
               required
-              className="w-full mt-1 p-2 border border-gray-300 rounded"
             />
           </div>
-          <button
+          
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            className="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-purple-800 transition duration-300"
             type="submit"
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded"
           >
             Login
-          </button>
+          </motion.button>
         </form>
-      </div>
+
+        <p className="text-center text-white mt-4">
+          Don't have an account? <a href="/signup" className="underline font-semibold">Sign Up</a>
+        </p>
+      </motion.div>
       <ToastContainer />
     </div>
   );

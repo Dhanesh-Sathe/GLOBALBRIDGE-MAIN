@@ -1,125 +1,85 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import '../css/Home.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const SignUp = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
-  const [signUpData, setSignUpData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+  const navigate = useNavigate();
+  const [signUpData, setSignUpData] = useState({ username: '', email: '', password: '' });
 
-  // Handle sign-up form input changes
   const handleSignUpChange = (e) => {
     const { name, value } = e.target;
-    setSignUpData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setSignUpData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Function to send OTP
   const handleSendOtp = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/api/sign-up', signUpData);
       if (response.data.success) {
-        console.log(response);
-        toast.success('OTP Send Successfully!');
+        toast.success('OTP Sent Successfully!');
         localStorage.setItem('email', signUpData.email);
-        setTimeout(() => {
-          navigate('/otpverification');
-        }, 1500); 
-        // Store email in localStorage
-        
-        // Redirect to OTP verification page
+        setTimeout(() => navigate('/otpverification'), 1500);
       } else {
-        console.log(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (err) {
-      console.error('Error sending OTP:', err);
+      toast.error('Error sending OTP');
     }
-     // Use navigate() for redirection
   };
 
   return (
-    <div className='bgColor1 min-h-screen'>
-      <div className='flex flex-row'>
-        <div className='h-[500px] w-[40%]'>
-          <img
-            src="./images/bg6.jpg"
-            alt=""
-            className='w-full h-full mt-[70px] ml-[150px] mb-[50px] object-cover borderRadius1 overflow-hidden'
-          />
-        </div>
-        <div>
-          <div className='flex ml-[200px] mr-[50px]'>
-            <img
-              src="./images/logo-removebg-preview.png"
-              alt="Logo"
-              className='h-[100px] w-[100px]'
-            />
-            <a href="/"><h1 className='cinzel text-5xl font-bold items-center my-6'>GlobalBridge</h1></a>
-          </div>
-          <div className='mt-[20px] mr-[100px] mb-[50px] ml-[280px]'>
-            <div className='bg-blue-300 mb-5 p-5 mt-2'>
-              <h2 className='text-center text-3xl Geneva font-bold'>Create Account</h2>
+    <div className='min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600'>
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.8 }}
+        className='bg-white p-8 rounded-2xl shadow-lg w-[90%] max-w-md text-center'>
+        
+        <h2 className='text-3xl font-bold text-gray-800 mb-4'>Create Account</h2>
+        <p className='text-gray-600 mb-6'>Join GlobalBridge and start your journey!</p>
+        
+        <form onSubmit={handleSendOtp} className='space-y-4'>
+          <motion.input 
+            whileFocus={{ scale: 1.05 }}
+            type='text' 
+            name='username' 
+            placeholder='Username' 
+            value={signUpData.username} 
+            onChange={handleSignUpChange} 
+            className='w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500' required />
+          
+          <motion.input 
+            whileFocus={{ scale: 1.05 }}
+            type='email' 
+            name='email' 
+            placeholder='Email' 
+            value={signUpData.email} 
+            onChange={handleSignUpChange} 
+            className='w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500' required />
+          
+          <motion.input 
+            whileFocus={{ scale: 1.05 }}
+            type='password' 
+            name='password' 
+            placeholder='Password' 
+            value={signUpData.password} 
+            onChange={handleSignUpChange} 
+            className='w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500' required />
+          
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            type='submit' 
+            className='w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md hover:bg-blue-700'>
+            Send OTP
+          </motion.button>
+        </form>
 
-              {/* Sign-up form */}
-              <form onSubmit={handleSendOtp}>
-                <div className='m-[10px]'>
-                  <label htmlFor="username" className='text-lg font-semibold Arial'>Username <span>*</span></label> <br />
-                  <input
-                    type="text"
-                    id="username"
-                    name='username'
-                    value={signUpData.username}
-                    onChange={handleSignUpChange}
-                    required
-                    className='h-[30px] w-[300px] text-lg TimesNewRoman px-[20px] py-[5px] rounded my-[5px] mx-[10px]'
-                  /><br />
-                </div>
-                <div className='m-[10px]'>
-                  <label htmlFor="email" className='text-lg font-semibold Arial'>Email <span>*</span></label> <br />
-                  <input
-                    type="email"
-                    id="email"
-                    name='email'
-                    value={signUpData.email}
-                    onChange={handleSignUpChange}
-                    required
-                    className='h-[30px] w-[300px] text-lg TimesNewRoman px-[20px] py-[5px] rounded my-[5px] mx-[10px]'
-                  /><br />
-                </div>
-                <div className='m-[10px]'>
-                  <label htmlFor="password" className='text-lg font-semibold Arial'>Password <span>*</span></label><br />
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={signUpData.password}
-                    onChange={handleSignUpChange}
-                    required
-                    className='h-[30px] w-[300px] text-lg TimesNewRoman px-[10px] py-[5px] rounded my-[5px] mx-[10px]'
-                  />
-                </div>
-                
-                <button
-                  type="submit"
-                  className='w-[320px] mx-[10px] py-[7px] px-[20px] text-lg rounded border-black border-solid bg-blue-700 cursor-pointer text-white font-semibold'>
-                  Send OTP
-                </button>
-              </form>
-
-              <p className='text-center text-base'>Already have an account then <span className='text-lg font-bold'><a href="/login">Login</a></span></p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <p className='text-gray-600 mt-4'>Already have an account? <a href='/login' className='text-blue-600 font-semibold'>Login</a></p>
+      </motion.div>
       <ToastContainer />
     </div>
   );
