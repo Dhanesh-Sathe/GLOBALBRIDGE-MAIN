@@ -17,7 +17,7 @@ const SignUp = () => {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/sign-up', signUpData);
+      const response = await axios.post('https://globalbridge-server.onrender.com/api/sign-up', signUpData);
       if (response.data.success) {
         toast.success('OTP Sent Successfully!');
         localStorage.setItem('email', signUpData.email);
