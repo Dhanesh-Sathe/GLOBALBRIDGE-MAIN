@@ -126,8 +126,8 @@ const UserDashboard = () => {
                         <td class="p-2">Importer</td>
                         <td class="p-2 text-green-500">Verified</td>
                         <td class="p-2">
-                            <a href="" class="text-blue-500 hover:underline">Edit</a> | 
-                            <a href="" class="text-blue-500 hover:underline">Delete</a>
+                            <a href="/" class="text-blue-500 hover:underline">Edit</a> | 
+                            <a href="/" class="text-blue-500 hover:underline">Delete</a>
                         </td>
                     </tr>
                 </tbody>
